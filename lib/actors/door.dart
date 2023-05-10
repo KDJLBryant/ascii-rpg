@@ -1,6 +1,7 @@
 class Door {
-  int id;
+  String action;
   bool locked;
+  List<int> pos = [];
 
-  Door({required this.id, required this.locked});
+  Door({required this.action, required this.locked, required this.pos});
 }

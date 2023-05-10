@@ -1,15 +1,21 @@
+import 'package:ascii_rpg/actors/door.dart';
 import 'package:collection/collection.dart';
 
 import 'item.dart';
 
 class Room {
   String name;
-  List<int> doorPos = [];
+  Door firstDoor;
+  Door secondDoor;
   List<Item> roomItems = [];
-  List<int> size = [10, 10];
+  List<int> size = [];
   List<List<String>> roomTiles = [];
 
-  Room({required this.name, required this.doorPos});
+  Room(
+      {required this.name,
+      required this.size,
+      required this.firstDoor,
+      required this.secondDoor});
 
   void fillWithItems({required List<Item> items}) {
     // Add items in room based on room name (for specific key rooms or trap room)
@@ -26,7 +32,9 @@ class Room {
     for (int i = 0; i < size[1]; i++) {
       // Set basic room tiles
       for (int j = 0; j < size[0]; j++) {
-        if (ListEquality().equals([j, i], doorPos)) {
+        if (ListEquality().equals([j, i], firstDoor.pos)) {
+          row.add(tiles['door']);
+        } else if (ListEquality().equals([j, i], secondDoor.pos)) {
           row.add(tiles['door']);
         } else if (i == 0 || j == 0) {
           row.add(tiles['wall']);
@@ -36,6 +44,11 @@ class Room {
           row.add(tiles['floor']);
         }
         // Set external actor tiles
+        for (Item item in roomItems) {
+          if (ListEquality().equals([j, i], item.pos)) {
+            row[j] = tiles['item'];
+          }
+        }
         if (ListEquality().equals([j, i], player.pos)) {
           row[j] = tiles['player'];
         }

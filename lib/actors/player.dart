@@ -8,6 +8,7 @@ class Player {
   int health = 100;
   List<Item> inventory = [];
   List<int> pos = [1, 1];
+  int currentRoomIndex = 0;
   List<Item> groundItems = [];
 
   Player({required this.name});
