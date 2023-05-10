@@ -29,13 +29,13 @@ class Game {
   Game();
 
   void run() {
+    print(roomList[player.currentRoomIndex].secondDoor.pos);
     // Initial setup (Debbuging code / need to move this elsewhere)
     roomList[player.currentRoomIndex].fillWithItems(items: itemList);
     // Main gameloop
     bool gameLoop = true;
     while (gameLoop) {
       // Update actors
-      player.update(room: roomList[player.currentRoomIndex]);
       roomList[player.currentRoomIndex].update(player: player, tiles: tiles);
       // Display room and info
       roomList[player.currentRoomIndex].display();
@@ -45,15 +45,8 @@ class Game {
       player.process(
           command: command,
           tiles: tiles,
-          room: roomList[player.currentRoomIndex]);
-    }
-  }
-
-  void loadRoom(doorId) {
-    if (doorId == 'forward') {
-      player.currentRoomIndex += 1;
-    } else if (doorId == 'backward') {
-      player.currentRoomIndex -= 1;
+          room: roomList[player.currentRoomIndex],
+          roomList: roomList);
     }
   }
 }
