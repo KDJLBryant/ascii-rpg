@@ -71,9 +71,10 @@ class Room {
   }
 
   void display() {
-    // Display all tiles for the room
+    // Display all tiles for the room and room name
     for (List<String> row in roomTiles.reversed.toList()) {
       print(row.join(' '));
     }
+    print('^^^ $name ^^^\n');
   }
 }

@@ -1,17 +1,13 @@
-import 'dart:collection';
 import 'package:collection/collection.dart';
-
 import 'item.dart';
 
 class Player {
-  String name;
+  String name = '';
   int health = 100;
   List<Item> inventory = [];
   List<int> pos = [1, 1];
   int currentRoomIndex = 0;
   List<Item> groundItems = [];
-
-  Player({required this.name});
 
   void handleMove(command, tiles, room) {
     switch (command) {
@@ -88,18 +84,32 @@ class Player {
 
   void handleDoorInteraction(command, roomList) {
     // Move to next room
-    if (ListEquality().equals(roomList[currentRoomIndex].secondDoor.pos, pos) &&
-        !roomList[currentRoomIndex].secondDoor.locked) {
+    if (ListEquality().equals(roomList[currentRoomIndex].secondDoor.pos, pos)) {
       currentRoomIndex += 1;
       pos = List.from(roomList[currentRoomIndex].firstDoor.pos);
     }
     // Move to previous room
     else if (ListEquality()
-            .equals(roomList[currentRoomIndex].firstDoor.pos, pos) &&
-        !roomList[currentRoomIndex].firstDoor.locked) {
+        .equals(roomList[currentRoomIndex].firstDoor.pos, pos)) {
       currentRoomIndex -= 1;
       pos = List.from(roomList[currentRoomIndex].secondDoor.pos);
     }
+  }
+
+  void display() {
+    // display player info
+    print('xXx--- $name ---xXx\n'
+        'Health: $health\n'
+        '¬¬¬ Inventory ¬¬¬');
+    if (inventory.isEmpty) {
+      print('...is empty');
+    } else {
+      for (Item item in inventory) {
+        print(item.name);
+      }
+    }
+    print('xXx' + '-' * (name.length + 8) + 'xXx');
+    print('\n');
   }
 
   void process(
