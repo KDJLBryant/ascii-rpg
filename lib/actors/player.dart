@@ -49,21 +49,24 @@ class Player {
     }
   }
 
-  void updateGroundItems(room) {
-    groundItems = [];
-    for (Item item in room.roomItems) {
-      if (ListEquality().equals(item.pos, pos)) {
-        groundItems.add(item);
+  void handleItemPickup(command, room) {
+    if (command == 'e') {
+      for (Item item in room.roomItems) {
+        if (ListEquality().equals(item.pos, pos)) {
+          print('picked up $item');
+          inventory.add(room.roomItems.removeAt(room.roomItems.indexOf(item)));
+          return;
+        }
       }
     }
   }
 
   void update({required room}) {
-    updateGroundItems(room);
-    print(groundItems);
+    //...
   }
 
   void process({required command, required tiles, required room}) {
     handleMove(command, tiles, room);
+    handleItemPickup(command, room);
   }
 }

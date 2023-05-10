@@ -6,9 +6,10 @@ import 'actors/room.dart';
 
 class Game {
   Player player = Player(name: 'Kyle');
-  Room room = Room(name: 'TestRoom');
+  Room room = Room(name: 'TestRoom', doorPos: [9, 1]);
   List<Item> itemList = [
-    Item(name: 'Key', id: 0, pos: [2, 2])
+    Item(name: 'Key', id: 0, pos: [2, 2]),
+    Item(name: 'Poop', id: 0, pos: [2, 2])
   ];
   Game();
 

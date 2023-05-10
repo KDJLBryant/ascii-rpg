@@ -3,4 +3,5 @@ const tiles = {
   'floor': '~',
   'wall': '#',
   'door': 'X',
+  'item': 'i',
 };
