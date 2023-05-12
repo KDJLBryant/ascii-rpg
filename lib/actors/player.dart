@@ -9,19 +9,15 @@ class Player {
   int currentRoomIndex = 0;
   List<Item> groundItems = [];
 
-  void handleMove(command, tiles, room) {
+  void handleMove(command, tiles, room, roomList) {
     switch (command) {
       case 'w': // Up
         {
           pos[1] += 1;
           if (room.getTile(pos) == tiles['wall']) {
             pos[1] -= 1;
-          } else if (ListEquality().equals(room.secondDoor.pos, pos) &&
-              room.secondDoor.locked) {
-            pos[1] -= 1;
-          } else if (ListEquality().equals(room.firstDoor.pos, pos) &&
-              room.firstDoor.locked) {
-            pos[1] -= 1;
+          } else if (room.getTile(pos) == tiles['door']) {
+            pos[1] -= handleLockedDoor(roomList);
           }
         }
         break;
@@ -30,12 +26,8 @@ class Player {
           pos[1] -= 1;
           if (room.getTile(pos) == tiles['wall']) {
             pos[1] += 1;
-          } else if (ListEquality().equals(room.secondDoor.pos, pos) &&
-              room.secondDoor.locked) {
-            pos[1] += 1;
-          } else if (ListEquality().equals(room.firstDoor.pos, pos) &&
-              room.firstDoor.locked) {
-            pos[1] += 1;
+          } else if (room.getTile(pos) == tiles['door']) {
+            pos[1] += handleLockedDoor(roomList);
           }
         }
         break;
@@ -44,12 +36,8 @@ class Player {
           pos[0] += 1;
           if (room.getTile(pos) == tiles['wall']) {
             pos[0] -= 1;
-          } else if (ListEquality().equals(room.secondDoor.pos, pos) &&
-              room.secondDoor.locked) {
-            pos[0] -= 1;
-          } else if (ListEquality().equals(room.firstDoor.pos, pos) &&
-              room.firstDoor.locked) {
-            pos[0] -= 1;
+          } else if (room.getTile(pos) == tiles['door']) {
+            pos[0] -= handleLockedDoor(roomList);
           }
         }
         break;
@@ -58,12 +46,8 @@ class Player {
           pos[0] -= 1;
           if (room.getTile(pos) == tiles['wall']) {
             pos[0] += 1;
-          } else if (ListEquality().equals(room.secondDoor.pos, pos) &&
-              room.secondDoor.locked) {
-            pos[0] += 1;
-          } else if (ListEquality().equals(room.firstDoor.pos, pos) &&
-              room.firstDoor.locked) {
-            pos[0] += 1;
+          } else if (room.getTile(pos) == tiles['door']) {
+            pos[0] += handleLockedDoor(roomList);
           }
         }
         break;
@@ -82,14 +66,46 @@ class Player {
     }
   }
 
-  void handleDoorInteraction(command, roomList) {
+  int handleLockedDoor(roomList) {
     // Move to next room
+    if (ListEquality().equals(roomList[currentRoomIndex].secondDoor.pos, pos)) {
+      if (roomList[currentRoomIndex].secondDoor.locked) {
+        for (Item item in inventory) {
+          if (item.name == 'Key' &&
+              item.id == roomList[currentRoomIndex].secondDoor.id) {
+            inventory.remove(item);
+            roomList[currentRoomIndex].secondDoor.locked = false;
+            return 0;
+          } else {
+            return 1;
+          }
+        }
+        return 1;
+      }
+    } else if (ListEquality()
+        .equals(roomList[currentRoomIndex].firstDoor.pos, pos)) {
+      if (roomList[currentRoomIndex].firstDoor.locked) {
+        for (Item item in inventory) {
+          if (item.name == 'Key' &&
+              item.id == roomList[currentRoomIndex].firstDoor.id) {
+            inventory.remove(item);
+            roomList[currentRoomIndex].secondDoor.locked = false;
+            return 0;
+          } else {
+            return 1;
+          }
+        }
+        return 1;
+      }
+    }
+    return 0;
+  }
+
+  void handleRoomChange(roomList) {
     if (ListEquality().equals(roomList[currentRoomIndex].secondDoor.pos, pos)) {
       currentRoomIndex += 1;
       pos = List.from(roomList[currentRoomIndex].firstDoor.pos);
-    }
-    // Move to previous room
-    else if (ListEquality()
+    } else if (ListEquality()
         .equals(roomList[currentRoomIndex].firstDoor.pos, pos)) {
       currentRoomIndex -= 1;
       pos = List.from(roomList[currentRoomIndex].secondDoor.pos);
@@ -114,8 +130,8 @@ class Player {
 
   void process(
       {required command, required tiles, required room, required roomList}) {
-    handleMove(command, tiles, room);
+    handleMove(command, tiles, room, roomList);
     handleItemPickup(command, room);
-    handleDoorInteraction(command, roomList);
+    handleRoomChange(roomList);
   }
 }
