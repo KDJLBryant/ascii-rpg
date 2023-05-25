@@ -7,7 +7,6 @@ class Player {
   List<Item> inventory = [];
   List<int> pos = [1, 1];
   int currentRoomIndex = 0;
-  List<Item> groundItems = [];
 
   void handleMove(command, tiles, room, roomList) {
     switch (command) {
@@ -67,7 +66,7 @@ class Player {
   }
 
   int handleLockedDoor(roomList) {
-    // Move to next room
+    // Check and unlock locked 'first door' if the key is present
     if (ListEquality().equals(roomList[currentRoomIndex].secondDoor.pos, pos)) {
       if (roomList[currentRoomIndex].secondDoor.locked) {
         for (Item item in inventory) {
@@ -82,7 +81,9 @@ class Player {
         }
         return 1;
       }
-    } else if (ListEquality()
+    }
+    // Check and unlock locked 'second door' if the key is present
+    else if (ListEquality()
         .equals(roomList[currentRoomIndex].firstDoor.pos, pos)) {
       if (roomList[currentRoomIndex].firstDoor.locked) {
         for (Item item in inventory) {
@@ -102,10 +103,13 @@ class Player {
   }
 
   void handleRoomChange(roomList) {
+    // Move to next room
     if (ListEquality().equals(roomList[currentRoomIndex].secondDoor.pos, pos)) {
       currentRoomIndex += 1;
       pos = List.from(roomList[currentRoomIndex].firstDoor.pos);
-    } else if (ListEquality()
+    }
+    // Move to previous room
+    else if (ListEquality()
         .equals(roomList[currentRoomIndex].firstDoor.pos, pos)) {
       currentRoomIndex -= 1;
       pos = List.from(roomList[currentRoomIndex].secondDoor.pos);

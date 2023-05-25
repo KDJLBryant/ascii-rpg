@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:ascii_rpg/actors/door.dart';
 import 'models/tiles.dart';
 import 'models/setup.dart';
 import 'actors/item.dart';
@@ -18,6 +17,7 @@ class Game {
     // Initial setup (Debbuging code / need to move this elsewhere)
     player.name = startScreen();
     roomList[1].fillWithItems(items: itemList);
+    roomList[2].fillWithEnemies(enemies: allEnemies);
     // Main gameloop
     bool gameLoop = true;
     while (gameLoop) {
