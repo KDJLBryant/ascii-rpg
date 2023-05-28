@@ -4,11 +4,12 @@ class Enemy {
   String name;
   int health = 100;
   List<int> pos;
-  bool following = false;
 
   Enemy({required this.name, required this.pos});
 
   void handleMove(room, tiles) {
+    // Move the enemy based of a randomly generated number for direction
+    // and prevent the enemy from moving beyond the boundries of walls and doors
     var randomNum = Random(DateTime.now().millisecondsSinceEpoch);
     var move = randomNum.nextInt(4);
 
@@ -53,6 +54,7 @@ class Enemy {
   }
 
   void process({required room, required tiles}) {
+    // Process all member methods
     handleMove(room, tiles);
   }
 }

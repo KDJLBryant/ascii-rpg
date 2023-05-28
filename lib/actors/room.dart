@@ -40,7 +40,7 @@ class Room {
     roomTiles = [];
     List<String> row = [];
 
-    // Update room tiles
+    // Render room tiles with any changes
     for (int i = 0; i < size[1]; i++) {
       // Set basic room tiles
       for (int j = 0; j < size[0]; j++) {
@@ -99,6 +99,6 @@ class Room {
       print(row.join(' '));
     }
     print('^^^ $name ^^^\n'
-        'xXx--- $description ---xXx\n');
+        '\nxXx--- $description ---xXx\n');
   }
 }

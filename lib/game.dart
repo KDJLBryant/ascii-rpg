@@ -6,22 +6,19 @@ import 'actors/player.dart';
 import 'actors/room.dart';
 
 class Game {
-  // Construct actor objects
+  // Initialize variables
   Player player = Player();
-  // Get rooms from setup
-  List<Room> roomList = allRooms;
-  // Get items from setup
-  List<Item> itemList = allItems;
+  List<Room> roomList = [];
+  List<Item> itemList = [];
 
   void run() {
-    // Initial setup (Debbuging code / need to move this elsewhere)
-    player.name = startScreen();
-    roomList[1].fillWithItems(items: itemList);
-    roomList[2].fillWithEnemies(enemies: allEnemies);
+    // Initialize player and rooms
+    startScreen();
     // Main gameloop
     bool gameLoop = true;
     while (gameLoop) {
       print('\n' * 100);
+      checkIfFinished();
       // Update actors
       roomList[player.currentRoomIndex].update(player: player, tiles: tiles);
       // Display room and info
@@ -31,17 +28,43 @@ class Game {
       String command = stdin.readLineSync() as String;
       // Process actors
       player.process(
-          command: command,
+          command: command.toLowerCase(),
           tiles: tiles,
           room: roomList[player.currentRoomIndex],
           roomList: roomList);
     }
   }
 
-  String startScreen() {
+  void startScreen() {
+    player = Player();
+    // Assign the rooms and items from the setup file to the room and item lists
+    roomList = allRooms;
+    itemList = allItems;
+    // Place the items and enemies to the indexed rooms
+    roomList[1].fillWithItems(items: itemList);
+    roomList[2].fillWithEnemies(enemies: allEnemies);
+
+    // Start the game with the player writing their desired name
     print('\nxXx--- Welcome to Dart ASCII rpg ---xXx\n\n'
         'Please enter your name adventurer!\n'
         '==================================');
-    return stdin.readLineSync() as String;
+    String name = stdin.readLineSync() as String;
+    player.name = name;
+  }
+
+  void checkIfFinished() {
+    // Check if the player has surpassed the length of the room list for ending the game
+    // and allow the player to restart if wanted
+    if (player.currentRoomIndex == roomList.length) {
+      print(
+          'xXx--- You have completed the game! ---xXx\nWould you like to continue (y/n): ');
+      String choice = stdin.readLineSync() as String;
+
+      if (choice.toLowerCase() == 'y') {
+        startScreen();
+      } else {
+        exit(0);
+      }
+    }
   }
 }

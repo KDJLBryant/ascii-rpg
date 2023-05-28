@@ -3,13 +3,11 @@ import 'package:ascii_rpg/actors/room.dart';
 import 'package:ascii_rpg/actors/door.dart';
 import 'package:ascii_rpg/actors/item.dart';
 
-// When creating a locked door, make sure the key is called 'Key'
-// and the 'id' numbers are the same.
-
+// Add rooms to the list for the player to navigate through
 List<Room> allRooms = [
   Room(
       name: 'Entrance',
-      description: 'Beginning room',
+      description: 'W/A/S/D to move and E to pick up',
       size: [6, 6],
       firstDoor: Door(locked: true, id: 0, pos: [0, 2]),
       secondDoor: Door(locked: false, id: 0, pos: [5, 2])),
@@ -36,13 +34,13 @@ List<Room> allRooms = [
       description: 'End room',
       size: [8, 8],
       firstDoor: Door(locked: false, id: 0, pos: [4, 7]),
-      secondDoor: Door(locked: true, id: 0, pos: [7, 4])),
+      secondDoor: Door(locked: false, id: 0, pos: [7, 4])),
 ];
-// Create items
+// Create items list
 List<Item> allItems = [
   Item(name: 'Key', id: 1, pos: [4, 6]),
 ];
-// Create enemies
+// Create enemies list
 List<Enemy> allEnemies = [
-  Enemy(name: 'Globlin', pos: [3, 3]),
+  Enemy(name: 'Ghost', pos: [3, 3]),
 ];

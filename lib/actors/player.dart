@@ -9,6 +9,8 @@ class Player {
   int currentRoomIndex = 0;
 
   void handleMove(command, tiles, room, roomList) {
+    // Move the player with the players input and push back the player
+    // if surpassing the boundries of a wall or locked door
     switch (command) {
       case 'w': // Up
         {
@@ -54,6 +56,8 @@ class Player {
   }
 
   void handleItemPickup(command, room) {
+    // Place item in player inventory and remove the item from the room
+    // if player is standing over item
     if (command == 'e') {
       for (Item item in room.roomItems) {
         if (ListEquality().equals(item.pos, pos)) {
@@ -106,13 +110,17 @@ class Player {
     // Move to next room
     if (ListEquality().equals(roomList[currentRoomIndex].secondDoor.pos, pos)) {
       currentRoomIndex += 1;
-      pos = List.from(roomList[currentRoomIndex].firstDoor.pos);
+      if (currentRoomIndex < roomList.length) {
+        pos = List.from(roomList[currentRoomIndex].firstDoor.pos);
+      }
     }
     // Move to previous room
     else if (ListEquality()
         .equals(roomList[currentRoomIndex].firstDoor.pos, pos)) {
       currentRoomIndex -= 1;
-      pos = List.from(roomList[currentRoomIndex].secondDoor.pos);
+      if (currentRoomIndex < roomList.length) {
+        pos = List.from(roomList[currentRoomIndex].secondDoor.pos);
+      }
     }
   }
 
@@ -134,6 +142,7 @@ class Player {
 
   void process(
       {required command, required tiles, required room, required roomList}) {
+    // Process all member methods with the players input
     handleMove(command, tiles, room, roomList);
     handleItemPickup(command, room);
     handleRoomChange(roomList);
