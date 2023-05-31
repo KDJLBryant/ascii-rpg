@@ -1,11 +1,19 @@
 import 'dart:math';
 
+import 'package:ascii_rpg/actors/item.dart';
+
 class Enemy {
   String name;
   int health = 100;
   List<int> pos;
+  List<Item> inventory = [];
+  bool isDead = false;
 
   Enemy({required this.name, required this.pos});
+
+  void addItem({required Item item}) {
+    inventory.add(item);
+  }
 
   void handleMove(room, tiles) {
     // Move the enemy based of a randomly generated number for direction
@@ -53,8 +61,20 @@ class Enemy {
     }
   }
 
+  int handleAttack(int damage) {
+    health -= damage;
+    return -5;
+  }
+
+  void handleDeath() {
+    if (health <= 0) {
+      isDead = true;
+    }
+  }
+
   void process({required room, required tiles}) {
     // Process all member methods
     handleMove(room, tiles);
+    handleDeath();
   }
 }

@@ -1,3 +1,4 @@
+import 'package:ascii_rpg/actors/enemy.dart';
 import 'package:collection/collection.dart';
 import 'item.dart';
 
@@ -124,6 +125,14 @@ class Player {
     }
   }
 
+  void handleAttack(room) {
+    for (Enemy enemy in room.roomEnemies) {
+      if (ListEquality().equals(enemy.pos, pos)) {
+        health += enemy.handleAttack(10);
+      }
+    }
+  }
+
   void display() {
     // display player info
     print('xXx--- $name ---xXx\n'
@@ -146,5 +155,6 @@ class Player {
     handleMove(command, tiles, room, roomList);
     handleItemPickup(command, room);
     handleRoomChange(roomList);
+    handleAttack(room);
   }
 }

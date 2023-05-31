@@ -23,7 +23,7 @@ class Room {
       required this.secondDoor});
 
   void fillWithItems({required List<Item> items}) {
-    // Add items in room
+    // Add item to room
     for (Item item in items) {
       roomItems.add(item);
     }
@@ -77,6 +77,17 @@ class Room {
     if (roomEnemies.isNotEmpty) {
       for (Enemy enemy in roomEnemies) {
         enemy.process(room: allRooms[player.currentRoomIndex], tiles: tiles);
+        // Check for dead enemy and drop any items in its inventory
+        if (enemy.isDead) {
+          if (enemy.inventory.isNotEmpty) {
+            for (Item item in enemy.inventory) {
+              item.pos = enemy.pos;
+              roomItems.add(item);
+            }
+          }
+          roomEnemies.remove(enemy);
+          return;
+        }
       }
     }
   }
@@ -98,7 +109,12 @@ class Room {
     for (List<String> row in roomTiles.reversed.toList()) {
       print(row.join(' '));
     }
-    print('^^^ $name ^^^\n'
-        '\nxXx--- $description ---xXx\n');
+    print('^^^ $name ^^^\n');
+    if (roomEnemies.isNotEmpty) {
+      for (Enemy enemy in roomEnemies) {
+        print('\n${enemy.name} - Health: ${enemy.health}');
+      }
+    }
+    print('\nxXx--- $description ---xXx\n');
   }
 }

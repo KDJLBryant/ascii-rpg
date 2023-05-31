@@ -1,4 +1,6 @@
 import 'dart:io';
+import 'package:ascii_rpg/actors/enemy.dart';
+
 import 'models/tiles.dart';
 import 'models/setup.dart';
 import 'actors/item.dart';
@@ -10,6 +12,7 @@ class Game {
   Player player = Player();
   List<Room> roomList = [];
   List<Item> itemList = [];
+  List<Enemy> enemyList = [];
 
   void run() {
     // Initialize player and rooms
@@ -40,6 +43,9 @@ class Game {
     // Assign the rooms and items from the setup file to the room and item lists
     roomList = allRooms;
     itemList = allItems;
+    enemyList = allEnemies;
+    // Give the Ghost enemy a key to drop when killed
+    enemyList[0].addItem(item: Item(name: 'Key', id: 2, pos: [0, 0]));
     // Place the items and enemies to the indexed rooms
     roomList[1].fillWithItems(items: itemList);
     roomList[2].fillWithEnemies(enemies: allEnemies);

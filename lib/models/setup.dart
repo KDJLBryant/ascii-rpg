@@ -22,7 +22,7 @@ List<Room> allRooms = [
       description: 'Be careful! Kill it!',
       size: [10, 8],
       firstDoor: Door(locked: false, id: 0, pos: [0, 1]),
-      secondDoor: Door(locked: false, id: 0, pos: [5, 0])),
+      secondDoor: Door(locked: true, id: 2, pos: [5, 0])),
   Room(
       name: 'Hallway',
       description: 'Explore',
